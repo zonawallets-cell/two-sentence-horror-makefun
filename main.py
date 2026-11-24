@@ -49,11 +49,14 @@ def main():
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(STORY)
     # Read back and verify the file holds exactly the validated story:
-    # the judge reads the file, not the string in memory.
+    # the judge reads the file, not the string in memory. Re-validate
+    # the text as read from disk, so a write that silently changed a
+    # character (encoding, newline) fails here instead of at the gate.
     with open(path, "r", encoding="utf-8", newline="") as f:
         written = f.read()
     if written != STORY:
         raise ValueError("entry.txt does not match the validated story")
+    validate(written)
     print("wrote %d chars to %s (verified)" % (len(STORY), path))
 
 
